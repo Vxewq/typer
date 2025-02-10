@@ -1,0 +1,116 @@
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap");
+
+@keyframes logo {
+  0% {
+    transform: translateX(-100%) skewX(40deg);
+  }
+
+  100% {
+    transform: translateX(100%) skewX(40deg);
+  }
+}
+
+.container-about {
+  background: rgba(16, 16, 16, 0.95);
+  color: white;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  .showcase {
+    width: 90%;
+    margin: 0 auto;
+    .title {
+      text-align: center;
+      font-size: 40px;
+
+      h1 {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        span {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          font-family: "Red Hat Display", sans-serif;
+          font-size: 50px;
+          //   border: 2px solid black;
+          padding-right: 20px;
+          border-radius: 10px;
+          position: relative;
+          overflow: hidden;
+          &::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 60%;
+            top: 20%;
+            left: 0;
+            z-index: -9;
+            background: #000;
+            transition: 1s;
+
+            animation: logo 2s cubic-bezier(0.39, 0.71, 0.64, 0.29) infinite;
+          }
+        }
+      }
+    }
+    p.par {
+      font-size: 20px;
+      text-align: center;
+      width: 60%;
+      margin: 0 auto;
+    }
+  }
+  .creator {
+    width: 90%;
+    margin: 0 auto;
+    .title {
+      text-align: center;
+      font-size: 40px;
+
+      h1 {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        span {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          font-family: "Red Hat Display", sans-serif;
+          font-size: 50px;
+          //   border: 2px solid black;
+          padding-right: 20px;
+          border-radius: 10px;
+          position: relative;
+          overflow: hidden;
+          &::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 60%;
+            top: 20%;
+            left: 0;
+            z-index: -9;
+            background: #000;
+            transition: 1s;
+
+            animation: logo 2s cubic-bezier(0.39, 0.71, 0.64, 0.29) infinite;
+          }
+        }
+      }
+    }
+    p.par {
+      font-size: 20px;
+      text-align: center;
+      width: 60%;
+      margin: 0 auto;
+    }
+  }
+}
