@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import "./style.scss";
 import { words } from "../../utils/axios";
+import Result from "../result";
 
 export default function Typer() {
-  let timeD = 60;
+  let timeD = 30;
   let [wrs, setWrs] = useState("");
   let [charIndex, setCharIndex] = useState(0);
   let [WPM, setWPM] = useState(0);
   let [mistakes, setMistakes] = useState(0);
   let [IsTyping, setIsTyping] = useState(false);
   let [timeLeft, setTimeLeft] = useState(timeD);
+  let [over, setOver] = useState(false);
+
   const inputRef = useRef(null);
   const charRefs = useRef([]);
   const [correctWrong, setCorrectWrong] = useState([]);
@@ -26,22 +29,25 @@ export default function Typer() {
   useEffect(() => {
     if (!IsTyping || timeLeft <= 0) {
       setIsTyping(false);
+      if(timeLeft <= 0 ){
+        setOver(true)
+      }
       return;
     }
+    
 
     const interval = setInterval(() => {
       setTimeLeft((prev) => prev - 1);
 
       setWPM((prevWPM) => {
         let correctChars = charIndex - mistakes;
-        let totalTime = timeD - (timeLeft - 1); 
+        let totalTime = timeD - (timeLeft - 1);
 
         let wpm =
           totalTime > 0 ? Math.round((correctChars / 5 / totalTime) * 60) : 0;
         return wpm < 0 || !wpm || wpm === Infinity ? 0 : wpm;
       });
     }, 1000);
-
     return () => clearInterval(interval);
   }, [IsTyping, timeLeft]);
 
@@ -53,7 +59,6 @@ export default function Typer() {
     let typedChar = event.key;
 
     // if (ignoredKeys.includes(event.key)) return;
-    console.log(typedChar);
     if (charIndex < characters.length && timeLeft > 0) {
       if (!IsTyping) {
         setIsTyping(true);
@@ -89,7 +94,8 @@ export default function Typer() {
     setMistakes(0);
     setCorrectWrong(Array(charRefs.current.length).fill(""));
 
-    setTimeLeft(timeD)
+    setTimeLeft(timeD);
+    setOver(false)
 
     words.get("").then((res) => {
       const wd = res.data.toString();
@@ -101,37 +107,36 @@ export default function Typer() {
     inputRef.current.focus();
   };
 
-  return (
-    <div className="all">
-      <div className="container-typer">
-        <div className="params">
-          <h1>Time Left: {timeLeft}</h1>
-          <h1>WPM: {WPM}</h1>
-          <h1>Mistakes: {mistakes}</h1>
-          <button onClick={again}>Again</button>
-        </div>
-        <div onClick={() => inputRef.current.focus()} className="words-wrapper">
-          <input
-            type="text"
-            ref={inputRef}
-            className="input-field"
-            onKeyDown={inputHandler}
-          />
-          {wrs.split("").map((char, index) => {
-            return (
-              <span
-                key={index}
-                ref={(e) => (charRefs.current[index] = e)}
-                className={`char ${index === charIndex ? " active" : ""} ${
-                  correctWrong[index]
-                }`}
-              >
-                {char}
-              </span>
-            );
-          })}
-        </div>
+  
+  return  over  ? (<Result wpm={WPM} time={timeD} mistakes={mistakes} again={again}/>)  : (<div className="all">
+    <div className="container-typer">
+      <div className="params">
+        <h1>Time Left: {timeLeft}</h1>
+        <h1>WPM: {WPM}</h1>
+        <h1>Mistakes: {mistakes}</h1>
+        <button onClick={again}>Again</button>
+      </div>
+      <div onClick={() => inputRef.current.focus()} className="words-wrapper">
+        <input
+          type="text"
+          ref={inputRef}
+          className="input-field"
+          onKeyDown={inputHandler}
+        />
+        {wrs.split("").map((char, index) => {
+          return (
+            <span
+              key={index}
+              ref={(e) => (charRefs.current[index] = e)}
+              className={`char ${index === charIndex ? " active" : ""} ${
+                correctWrong[index]
+              }`}
+            >
+              {char}
+            </span>
+          );
+        })}
       </div>
     </div>
-  );
+  </div>);
 }
